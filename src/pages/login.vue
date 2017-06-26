@@ -34,7 +34,7 @@
                                   <p>注 册</p>
                               </div>
                           <div class="text_2">
-                              <input name="account" type="text" placeholder="输入手机号" v-model="register.phome"/>
+                              <input name="account" type="text" placeholder="输入手机号" v-model="register.phone"/>
                               <input type="button" value="获取验证码" class="num" @click="getVcode()"/>
                           </div>
                           <div class="text_2">
@@ -78,7 +78,7 @@ export default {
   data () {
     return {
       login:{},
-      register:{},
+      register:{}
     }
   },
   computed: mapGetters({
@@ -112,9 +112,8 @@ export default {
       let data={
             phone: this.register.phone
         };
-      api.register(data).then(function(res){
+      api.getVcode(data).then(function(res){
           if(res.data.Code ==3){
-            $("#loginModal").modal("hide");
             alert(res.data.Msg);
           }
       }).catch(function(err){
@@ -123,11 +122,29 @@ export default {
     },
      // 注册
     doRegist () {
-
+        let that = this;
+        let data={
+            account:that.register.phone,
+            pwd:that.register.pwd,
+            vcode:that.register.vcode,
+            nick:that.register.nickname,
+            phone:that.register.phone
+          };
+        if(that.register.phone && that.register.pwd && that.register.nickname && that.register.vcode){
+            api.register(data).then(function(res){
+                if(res.data.Code ==3){
+                  $("#loginModal").modal("hide");
+                  that.$store.dispatch('changeUser', res.data.Data);
+                  alert(res.data.Msg);
+                }
+            }).catch(function(err){
+                console.log(err);
+              });
+        }else{
+          alert("存在空值，请重新输入！");
+        }
     },
   }
-
-
 }
 </script>
 
