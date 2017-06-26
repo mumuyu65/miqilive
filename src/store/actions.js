@@ -7,6 +7,12 @@ export const changeLoginway = ({
     commit('CHANGE_LOGINWAY', loginway)
 }
 
+export const changeUser = ({
+    commit
+}, value) => {
+    commit('CHANGE_USER', value)
+}
+
 
 export const changeIsLogin = ({
     commit

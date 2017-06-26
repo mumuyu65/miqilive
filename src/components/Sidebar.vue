@@ -3,10 +3,11 @@
         <div class="text-center user-logo">
             <a href="javascript:void(0)">
                 <img src="../../static/images/course_t.png" alt="" class="img-circle"  data-toggle="modal" data-target="#loginModal"/>
-                <h6 id="zhibo_account">游客</h6>
+                <h6>{{user.Nick}}</h6>
             </a>
             <h6 class="text-center">赢豆</h6>
-            <img src="../../static/images/gold.png" alt=""/><span id="zhibo_bean" title="">0</span>
+            <img src="../../static/images/gold.png" alt=""/>
+                <span title="">{{user.Beans}}</span>
         </div>
         <ul class="list-unstyled">
             <div class="divider"></div>
@@ -77,20 +78,21 @@
         </ul>
         <div class="sidebar-divider"></div>
          <!--登录和注册部分-->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <login></login>
-        </div>
+        <login></login>
     </div>
-   </div>
 </template>
 
 <script>
 import Login from '@/pages/login'
+
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'sidebar',
-  components: { Login }
+  components: { Login },
+  computed: mapGetters({
+     user: 'getUser'
+  }),
 }
 </script>
 

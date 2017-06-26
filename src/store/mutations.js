@@ -6,7 +6,11 @@ export default {
             state.loginway = loginway
         },
 
-    CHANGE_ISLOGIN(state, value) {
-        state.islogin = value
-    }
+        CHANGE_USER(state, value) {
+            state.user = value
+        },
+
+        CHANGE_ISLOGIN(state, value) {
+            state.islogin = value
+        }
 }

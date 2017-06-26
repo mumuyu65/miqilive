@@ -13,7 +13,10 @@ Vue.use(Vuex)
 const state = {
     islogin: false,
     loginway: 'login',
-    user: {}
+    user: {
+        Nick: '游客',
+        Beans: 0,
+    }
 }
 
 export default new Vuex.Store({
