@@ -12,22 +12,6 @@ class API {
         return axios.post('/cctv/login', {}, config);
     }
 
-    economicsZhibo(param) {
-        return axios.get('https://mt.china-vm.com:57077/query/newslist', {
-            params: param
-        }, config);
-    }
 
-    economicsNews(param) {
-        return axios.get('https://mt.china-vm.com:57077/query/newslist', {
-            params: param
-        }, config);
-    }
-
-    economicsTeacher(param) {
-        return axios.get('https://mt.china-vm.com:57077/query/newslist', {
-            params: param
-        }, config);
-    }
 }
 export default API;

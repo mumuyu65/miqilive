@@ -1,0 +1,171 @@
+/* 屏幕适配 */
+@media screen and (max-width:1366px ){
+    .daozhibo .zhibo{
+        padding-left:10px;
+        overflow:hidden;
+    }
+
+    .daozhibo .zj-list {
+        width: 20px;
+        height: 907px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 2;
+        background-color:#000;
+        transition:width 1s;
+        -moz-transition:width 1s; /* Firefox 4 */
+        -webkit-transition:width 1s; /* Safari and Chrome */
+        -o-transition:width 1s; /* Opera */
+    }
+
+    .daozhibo .zj-list.active {
+        width: 380px;
+        height: 907px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 2;
+        background-color:#000;
+    }
+
+    .daozhibo .chat{
+        position:absolute;
+        right: 0;
+        bottom:0;
+        top:43px;
+        width:calc(100% - 938px);
+        width:-webkit-calc(100% - 938px);
+        width:-moz-calc(100% - 938px);
+        height:800px;
+        padding:10px 30px;
+    }
+
+    .daozhibo .shrink{
+        position: absolute;
+        left: 72px;
+        z-index: 300;
+        top: 210px;
+        width:13px;
+        height:13px;
+        cursor:pointer;
+        display:block;
+        background-image: url('../images/shrink_close.png');
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
+
+    .daozhibo .shrink.active{
+        position: absolute;
+        left: 72px;
+        z-index: 300;
+        top: 210px;
+        width:13px;
+        height:13px;
+        cursor:pointer;
+        display:block;
+        background-image: url('../images/shrink_open.png');
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
+}
+
+@media screen and (min-width:1367px ) and (max-width: 1440px){
+    .daozhibo .zhibo{
+        padding-left:10px;
+        overflow:hidden;
+    }
+
+    .daozhibo .zj-list {
+        width: 20px;
+        height: 907px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 2;
+        background-color:#000;
+        transition:width 1s;
+        -moz-transition:width 1s; /* Firefox 4 */
+        -webkit-transition:width 1s; /* Safari and Chrome */
+        -o-transition:width 1s; /* Opera */
+    }
+
+    .daozhibo .zj-list.active {
+        width: 380px;
+        height: 907px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 2;
+        background-color:#000;
+    }
+
+    .daozhibo .chat{
+        position:absolute;
+        right: 0;
+        bottom:0;
+        top:43px;
+        width:calc(100% - 938px);
+        width:-webkit-calc(100% - 938px);
+        width:-moz-calc(100% - 938px);
+        height:800px;
+        padding:10px 30px;
+    }
+
+    .daozhibo .shrink{
+        position: absolute;
+        left: 72px;
+        z-index: 300;
+        top: 210px;
+        width:13px;
+        height:13px;
+        cursor:pointer;
+        display:block;
+        background-image: url('../images/shrink_close.png');
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
+
+    .daozhibo .shrink.active{
+        position: absolute;
+        left: 72px;
+        z-index: 300;
+        top: 210px;
+        width:13px;
+        height:13px;
+        cursor:pointer;
+        display:block;
+        background-image: url('../images/shrink_open.png');
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
+}
+
+@media screen and (min-width:1441px ) and (max-width: 1600px){
+    .daozhibo .zj-list {
+        width: 270px;
+        height: 910px;
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .daozhibo .zj-list .inner-container {
+        position: absolute;
+        left: 10px;
+        padding: 10px;
+        width: 270px;
+        height: 930px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding-bottom: 20px;
+    }
+
+    .daozhibo .chat{
+        position:absolute;
+        right: 0;
+        bottom:0;
+        top:43px;
+        width:calc(100% - 1218px);
+        width:-webkit-calc(100% - 1218px);
+        width:-moz-calc(100% - 1218px);
+        height:800px;
+        padding:10px 30px;
+    }
+}
