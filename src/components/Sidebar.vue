@@ -1,8 +1,8 @@
 <template>
-    <div class="sidebar">
+   <div class="sidebar">
         <div class="text-center user-logo">
-            <a href="javascript:void(0)" id="user_logo">
-                <img src="../../static/images/course_t.png" alt="" class="img-circle"/>
+            <a href="javascript:void(0)">
+                <img src="../../static/images/course_t.png" alt="" class="img-circle"  data-toggle="modal" data-target="#loginModal"/>
                 <h6 id="zhibo_account">游客</h6>
             </a>
             <h6 class="text-center">赢豆</h6>
@@ -10,8 +10,8 @@
         </div>
         <ul class="list-unstyled">
             <div class="divider"></div>
-            <li class="text-center active">
-              <router-link to="/smallGame">
+            <li class="text-center">
+              <router-link to="/">
                   <img src="../../static/images/youxi-icon.png" alt="">
                   <h6>小游戏</h6>
               </router-link>
@@ -76,15 +76,28 @@
             <div class="divider"></div>
         </ul>
         <div class="sidebar-divider"></div>
+         <!--登录和注册部分-->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <login></login>
+        </div>
     </div>
+   </div>
 </template>
 
 <script>
+import Login from '@/pages/login'
 export default {
   name: 'sidebar',
+  components: { Login }
 }
 </script>
 
 <style scoped>
+
+.router-link-active{
+   background-color:#d1201d;
+}
 
 </style>

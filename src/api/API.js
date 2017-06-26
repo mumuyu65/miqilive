@@ -9,7 +9,17 @@ import config from './config'
 class API {
     login(param) {
         config.data = param;
-        return axios.post('/cctv/login', {}, config);
+        return axios.post('/gusmrk/login', {}, config);
+    }
+
+    getVcode(param) {
+        config.data = param;
+        return axios.post('/gusmrk/vcode/get', {}, config);
+    }
+
+    register(param) {
+        config.data = param;
+        return axios.post('/gusmrk/register', {}, config);
     }
 
 
