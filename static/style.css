@@ -40,7 +40,7 @@ a:visited,a:link,a:focus{
     vertical-align: middle;
 }
 
-.daozhibo .header ul li a:hover{
+.daozhibo .header ul li>a:hover{
     text-decoration: none;
 }
 
@@ -76,14 +76,14 @@ a:visited,a:link,a:focus{
 }
 
 
-.daozhibo .sidebar ul li a{
+.daozhibo .sidebar ul li>a{
     display: inline-block;
     width:100%;
     padding:8px 0;
     height:100%;
 }
 
-.daozhibo .sidebar ul li a:hover{
+.daozhibo .sidebar ul li>a:hover{
     text-decoration: none;
 }
 
@@ -91,7 +91,7 @@ a:visited,a:link,a:focus{
     width:30px;
 }
 
-.daozhibo .sidebar ul li a:hover{
+.daozhibo .sidebar ul li>a:hover{
     background-color:#d1201d;
 }
 
@@ -561,7 +561,7 @@ a:visited,a:link,a:focus{
 .login_border {
     background-color: #fff;
     width: 450px;
-    height: 370px;
+    height: 450px;
     margin:0 auto;
     margin-top: 50px;
     padding: 0 10%;
@@ -598,6 +598,7 @@ a:visited,a:link,a:focus{
 .text_2 {
     width: 100%;
     margin-bottom: 25px;
+    position: relative;
 }
 
 .text_3 {
