@@ -22,6 +22,16 @@ class API {
         return axios.post('/gusmrk/register', {}, config);
     }
 
+    getGift(param) {
+        config.data = param;
+        return axios.post('/gusmrk/gift/query', {}, config);
+    }
+
+    getZhibo(param) {
+        config.data = param;
+        return axios.post('/gusmrk/liveinfo', {}, config);
+    }
+
 
 }
 export default API;
