@@ -32,6 +32,11 @@ class API {
         return axios.post('/gusmrk/liveinfo', {}, config);
     }
 
+    userLevel(param) {
+        config.data = param;
+        return axios.post('/gusmrk/level/query', {}, config);
+    }
+
 
 }
 export default API;

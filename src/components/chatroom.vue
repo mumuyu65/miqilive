@@ -7,8 +7,17 @@
             </li>
         </ul>
         <div class="chat-inner">
-            <div class="inner-container">
-
+            <div class="inner-container" id="chat_inner">
+                <div class="chat-item" v-for="item in chatInner">
+                  <ol class="list-inline">
+                    <li style="vertical-align: bottom">
+                      <img v-bind:src="item.userlog" alt="">
+                    </li>
+                    <li style="vertical-align: bottom"><h5>{{item.date}}</h5></li>
+                    <li><h5>{{item.name}}</h5></li>
+                  </ol>
+                  <h4>{{item.text}}</h4>
+                </div>
             </div>
         </div>
         <ul class="list-inline">
@@ -59,12 +68,17 @@ export default {
       chatContent:'',
       ws:null,
       user:{},
+      userLevel:[],
+      chatInner:[],
+      roomID:0,
     }
   },
   mounted (){
     this.initFace();
 
     this.initChat();
+
+    this.UserLevel();  //用户等级
   },
    computed: mapGetters({
       userOnline: 'getOnline'
@@ -88,6 +102,18 @@ export default {
       }
     },
 
+    //用户等级
+    UserLevel (){
+      let that =this;
+      api.userLevel().then(function(res){
+           if (res.data.Code == 3) {
+                that.userLevel = res.data.Data;
+            }
+      }).catch(function(err){
+          console.log(err);
+        });
+    },
+
     //开启或关闭表情
     toggleFace (){
       this.showFace = !this.showFace;
@@ -103,7 +129,7 @@ export default {
     //发送内容
     sendContent (){
        if(this.user){
-           console.log(this.chatContent);
+           this.sendText(this.chatContent);
            this.chatContent = '';
        }else{
           alert("未登录,不可以发送消息的哦!");
@@ -139,12 +165,12 @@ export default {
                 case 24:
                     let rcvbody_24 = data.body;
                     let data_24 = JSON.parse(JSON.stringify(rcvbody_24));
-                    //that.personInformation(data_24);
+                    that.personInformation(data_24);
                     break;
                 case 26:
                     let rcvbody_26 = data.body;
                     let data_26 = JSON.parse(JSON.stringify(rcvbody_26));
-                    //that.quliaoInformation(data_26);
+                    that.quliaoInformation(data_26);
                     break;
                 case 28:
                     let rcvbody_28 = data.body;
@@ -231,6 +257,124 @@ export default {
             'body': body
         }));
     },
+
+    //发送消息
+    sendText (Message) {
+        console.log(Message);
+        var body = '{"roomid":"' + this.roomID + '","message":"' + Message + '","type":"0"}';
+        var pklen = body + 16;
+        this.ws.send(JSON.stringify({
+            'pklen': pklen,
+            'klen': 16,
+            'ver': 1,
+            'op': 23,
+            'id': 4,
+            'body': JSON.parse(body)
+        }));
+    },
+
+    personInformation (Data) {
+        console.log('自己在群聊中发送消息的反馈', Data);
+    },
+
+    //接收群聊消息
+    quliaoInformation (Data) {
+        let date = this.dateStamp(parseInt(Data.time * 1000)); //时间戳
+        switch (Data.type) {
+            case '0':
+                this.showChat(date, Data.username, Data.message, Data);
+                break;
+            case '1':
+                this.showGift(date, Data, Data.message.giftid, Data.message.giftcount, Data.message.giftusername);
+                break;
+            case '2':
+                    this.showChat(date, Data.username, Data.message.inname + '进入房间', Data);
+                    break;
+            case '3':
+                this.showChat(date, Data.username, Data.message.inname + '退出房间', Data);
+                break;
+            case '5':
+                alert("直播结束....");
+                break;
+        }
+    },
+
+    //时间转换格式
+    dateStamp (tm) {
+        //获取一个事件戳
+        var time = new Date(tm);
+        //获取年份信息
+        var y = time.getFullYear();
+        //获取月份信息，月份是从0开始的
+        var m = time.getMonth() + 1;
+        //获取天数信息
+        var d = time.getDate();
+
+        var H = time.getHours();
+
+        var M = time.getMinutes();
+
+        var S = time.getSeconds();
+        //返回拼接信息
+        return this.add(H) + '：' + this.add(M);
+    },
+    add(m) {
+        return m < 10 ? '0' + m : m
+    },
+
+    //文字始终置顶
+    scrollTop (){
+        let t = document.getElementById('chat_inner');
+        t.scrollTop = t.scrollHeight;
+    },
+
+    //分析输入的聊天内容
+     /*进行解析*/
+    analysis (value) {
+        let arr = value.match(/\[.{1,5}\]/g);
+        console.log(arr);
+        if (arr) {
+            for (let i = 0; i < arr.length; i++) {
+                for (let j in this.chatFaces) {
+                    if (arr[i] == this.chatFaces[j].phrase) {
+                        var ex = '<img src="' + this.chatFaces[j].url + '"/>';
+                        value = value.replace(arr[i], ex);
+                        break;
+                    }
+
+                }
+            }
+        }
+        return value;
+    },
+
+    //显示聊天内容
+    showChat (date, name, text, img) {
+        //根据不同的级别，显示不同的图标
+        var userLog;
+        console.log('用户接受群聊消息', img);
+        let len = this.userLevel.length;
+        for (let i = 0; i < len; i++) {
+            if (img.userflag == this.userLevel[i].fid && img.userlevel == this.userLevel[i].lid) {
+                userLog = this.userLevel[i].role_css;
+            }
+        }
+
+        var Text = this.analysis(text);
+
+        let chat_content={
+            userlog:userLog,
+            name:name,
+            text:Text,
+            date:date
+        };
+
+        this.chatInner.push(chat_content);
+
+        this.scrollTop();
+    },
+
+
 
   },
 }
