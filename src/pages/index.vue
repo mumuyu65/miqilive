@@ -180,10 +180,10 @@
               </div>
               <ul class="list-unstyled">
                   <li>
-                      <input class="gift-num" value="1" type="text" />
-                      <div class="count" id="gift_add"></div>
+                      <input class="gift-num" v-model="giftNum" type="text" />
+                      <div class="count" @click="addCount()"></div>
                       <img src="../../static/images/button-red.png" alt=""/>
-                      <div class="gift-btn" id="gift_send"></div>
+                      <div class="gift-btn" @click="giftSend()"></div>
                   </li>
                   <li style="margin-top:20px;">
                       <img src="../../static/images/gold.png" alt="" /><span style="margin-right:20px;">120</span>
@@ -236,6 +236,8 @@ export default {
   data () {
     return {
         gifts: [],
+        giftNum: 1,
+        giftSelected:'',
     }
   },
   mounted (){
@@ -291,13 +293,26 @@ export default {
       });
     },
 
-    selectedGift(gift){
+    //选择奖品
+    selectedGift (gift){
       for(let i in this.gifts){
         this.gifts[i].isSelected = false;
       }
       gift.isSelected = !gift.isSelected;
+
+      this.giftSelected = gift;
+    },
+    //奖品个数
+    addCount (){
+      this.giftNum++;
+    },
+
+    //送礼
+    giftSend (){
+      console.log(this.giftSelected,this.giftNum);
     }
-  }
+
+  },
 
 }
 </script>
