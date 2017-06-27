@@ -90,9 +90,19 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'sidebar',
   components: { Login },
+  mounted (){
+    this.init();
+  },
   computed: mapGetters({
-     user: 'getUser'
+      user: 'getUser'
   }),
+  methods:{
+    init (){
+        if(window.localStorage.getItem("user")){
+            this.$store.dispatch('changeUser',JSON.parse(window.localStorage.getItem("user")));
+        }
+    }
+  }
 }
 </script>
 

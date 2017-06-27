@@ -19,3 +19,9 @@ export const changeIsLogin = ({
 }, value) => {
     commit('CHANGE_ISLOGIN', value)
 }
+
+export const changeOnlinePeople = ({
+    commit
+}, value) => {
+    commit('CHANGE_ONLINE_PEOPLE', value)
+}

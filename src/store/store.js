@@ -16,7 +16,9 @@ const state = {
     user: {
         Nick: '游客',
         Beans: 0,
-    }
+    },
+    userOnline: 0,
+    chatText: {}
 }
 
 export default new Vuex.Store({

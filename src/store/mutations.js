@@ -12,5 +12,9 @@ export default {
 
         CHANGE_ISLOGIN(state, value) {
             state.islogin = value
+        },
+
+        CHANGE_ONLINE_PEOPLE(state, value) {
+            state.userOnline = value
         }
 }

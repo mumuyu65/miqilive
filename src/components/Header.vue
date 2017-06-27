@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-        <router-link to="/smallgame"><img src="../../static/win/images/logo.png" class="logo" /></router-link>
+        <router-link to="/"><img src="../../static/win/images/logo.png" class="logo" /></router-link>
         <ul class="list-inline pull-right">
             <li style="margin-right:30px;">
                 <a href="javascript:void(0)" @click="AddFavorite()">
