@@ -60,6 +60,7 @@ export default {
     this.initFace();
   },
   methods:{
+    //聊天图标
     initFace (){
       let that =this;
       Jsonp('https://api.weibo.com/2/emotions.json?source=1362404091',function (err, res) {
