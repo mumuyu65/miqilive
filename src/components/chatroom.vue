@@ -429,7 +429,13 @@ export default {
             }
         }
 
+        let obj=JSON.parse(window.localStorage.getItem("user"));
+
+        obj.Beans=parseInt(this.user.Beans) - parseInt(giftPrice) * parseInt(giftCount);
+
         this.$store.dispatch('changeBeans',(parseInt(this.user.Beans) - parseInt(giftPrice) * parseInt(giftCount)));
+
+        window.localStorage.setItem('user',JSON.stringify(obj));
 
         let Text='<span style="color:#f00;">' + giftusername + '送了' + giftCount + '个</span><img style="width:56px;" src="' + giftImg + '" alt="">';
 

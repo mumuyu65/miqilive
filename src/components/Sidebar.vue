@@ -94,14 +94,14 @@ export default {
     this.init();
   },
   computed: mapGetters({
-      user: 'getUser'
+      user: 'getUser',
   }),
   methods:{
     init (){
-        if(window.localStorage.getItem("user")){
-            this.$store.dispatch('changeUser',JSON.parse(window.localStorage.getItem("user")));
-        }
-    }
+      if(window.localStorage.getItem("user")){
+        this.$store.dispatch('changeUser',JSON.parse(window.localStorage.getItem("user")));
+     }
+    },
   }
 }
 </script>
