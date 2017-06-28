@@ -180,7 +180,7 @@
               </div>
               <ul class="list-unstyled">
                   <li>
-                      <input class="gift-num" v-model="giftNum" type="text" />
+                      <input class="gift-num" v-model="lastGiftNum" type="text" />
                       <div class="count" @click="addCount()"></div>
                       <img src="../../static/images/button-red.png" alt=""/>
                       <div class="gift-btn" @click="giftSend()"></div>
@@ -246,13 +246,9 @@ export default {
   },
   computed: mapGetters({
       giftNum: 'getGiftNum',
-      giftSelected: 'getGiftSelected'
+      giftSelected: 'getGiftSelected',
+      lastGiftNum:'getLastGiftNum'
   }),
-  watch: {
-      giftNum: function (curVal,oldVal){
-　　　　　console.log(curVal,oldVal);
-　　　}
-  },
   methods: {
     initData() {
         //轮播图
@@ -316,14 +312,16 @@ export default {
     //奖品个数
     addCount (){
       this.$store.dispatch('changeGiftNum',this.giftNum);
+      this.lastGiftNum=this.giftNum;
     },
 
     //送礼
     giftSend (){
-      let lastGiftNum=this.giftNum;
+      let lastGiftNum=this.lastGiftNum;
       this.$store.dispatch('changeGiftSelected',this.giftSelected);
       this.$store.dispatch('changelastGiftNum',lastGiftNum);
       if(window.localStorage.getItem("user")){
+        console.log('sendGift');
         this.$store.dispatch("sendGift",true);
       }
       else{

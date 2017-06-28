@@ -40,7 +40,7 @@
                 <h6 style="color:#f00;">400-872-5188</h6>
             </li>
             <li class="pull-right">
-                <button class="btn btn-send">
+                <button class="btn btn-send" @click="sendContent()">
                     <img src="../../static/images/send.png" alt="send"/>
                     <span>发送</span>
                 </button>
@@ -84,6 +84,7 @@ export default {
       userOnline: 'getOnline',
       giftNum: 'getLastGiftNum',
       giftSelected:'getGiftSelected',
+      sendGift:'isSendGift'
   }),
   methods:{
     //聊天图标
@@ -102,9 +103,6 @@ export default {
          this.ConnSvr();
          this.user= JSON.parse(window.localStorage.getItem("user"));
       }
-
-      console.log(this.giftNum,this.giftSelected);
-
     },
 
     //用户等级
@@ -134,8 +132,13 @@ export default {
     //发送内容
     sendContent (){
        if(this.user){
-           this.sendText(this.chatContent);
-           this.chatContent = '';
+            if(this.chatContent){
+                 this.sendText(this.chatContent);
+                 this.chatContent = '';
+            }else{
+                alert("输入的内容不能为空！");
+            }
+
        }else{
           alert("未登录,不可以发送消息的哦!");
        }
@@ -181,6 +184,7 @@ export default {
                     let rcvbody_28 = data.body;
                     let data_28 = JSON.parse(JSON.stringify(rcvbody_28));
                     console.log("进入房间后的反馈信息", data_28);
+                    that.$store.dispatch('changeOnlinePeople',data_28.data.userlist.length);
                     if (data_28.code == 100) {
                         let roomId = data_28.data.roomid;
                         that.roomID = roomId;
