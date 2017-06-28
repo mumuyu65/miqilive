@@ -42,3 +42,15 @@ export const sendGift = ({
 }, value) => {
     commit('SEND_GIFT', value)
 }
+
+export const changeGifts = ({
+    commit
+}, value) => {
+    commit('CHANGE_GIFTS', value)
+}
+
+export const changeBeans = ({
+    commit
+}, value) => {
+    commit('CHANGE_BEANS', value)
+}

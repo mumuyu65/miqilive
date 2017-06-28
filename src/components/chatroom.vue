@@ -84,8 +84,12 @@ export default {
       userOnline: 'getOnline',
       giftNum: 'getLastGiftNum',
       giftSelected:'getGiftSelected',
-      sendGift:'isSendGift'
+      sendGift:'isSendGift',
+      giftArr:'getGifts'
   }),
+  watch:{
+    sendGift:'chatGift'
+  },
   methods:{
     //聊天图标
     initFace (){
@@ -142,6 +146,32 @@ export default {
        }else{
           alert("未登录,不可以发送消息的哦!");
        }
+    },
+
+    //发送礼物
+    chatGift (){
+       if(window.localStorage.getItem("user")){
+        var body = '{"roomid":"' + this.roomID + '",' + '"type":"1",' +
+            '"message":{' +
+            '"giftid":"' + this.giftSelected + '",' +
+            '"giftcount":"' + this.giftNum + '"' +
+            '}' +
+            '}';
+        var pklen = body + 16;
+        if(this.sendGift){
+            this.ws.send(JSON.stringify({
+            'pklen': pklen,
+            'klen': 16,
+            'ver': 1,
+            'op': 42,
+            'id': 4,
+            'body': JSON.parse(body)
+        }));
+         this.$store.dispatch("sendGift",false);
+        }
+      }else{
+        alert("未登录,不可以发送礼物的哦!");
+      }
     },
 
     ConnSvr (){
@@ -381,8 +411,37 @@ export default {
         this.scrollTop();
     },
 
+    //显示礼物
+    showGift(date, Data, giftid, giftCount, giftusername) {
+        var img;
+        var giftImg, giftPrice;
+        for (let i = 0; i < this.giftArr.length; i++) {
+            if (giftid == this.giftArr[i].id) {
+                giftImg = this.giftArr[i].imgurl;
+                giftPrice = this.giftArr[i].price;
+            }
+        }
 
+        let len = this.userLevel.length;
+        for (let i = 0; i < len; i++) {
+            if (Data.userflag == this.userLevel[i].fid && Data.userlevel == this.userLevel[i].lid) {
+                img = this.userLevel[i].role_css;
+            }
+        }
 
+        this.$store.dispatch('changeBeans',(parseInt(this.user.Beans) - parseInt(giftPrice) * parseInt(giftCount)));
+
+        let Text='<span style="color:#f00;">' + giftusername + '送了' + giftCount + '个</span><img style="width:56px;" src="' + giftImg + '" alt="">';
+
+        let chat_content={
+            userlog:img,
+            name:Data.username,
+            date:date,
+            text:Text
+        };
+        this.chatInner.push(chat_content);
+        this.scrollTop();
+    },
   },
 }
 </script>

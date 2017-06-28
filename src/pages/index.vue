@@ -237,7 +237,7 @@ export default {
   name: 'SmallGame',
   data () {
     return {
-        gifts: [],
+        lastGiftNum:1,
     }
   },
   mounted (){
@@ -247,7 +247,8 @@ export default {
   computed: mapGetters({
       giftNum: 'getGiftNum',
       giftSelected: 'getGiftSelected',
-      lastGiftNum:'getLastGiftNum'
+      sendGift:'isSendGift',
+      gifts:'getGifts'
   }),
   methods: {
     initData() {
@@ -264,8 +265,8 @@ export default {
             for(let i in prices){
               prices[i].isSelected = false;
             }
-            that.gifts = prices;
-
+            //that.gifts = prices;
+            that.$store.dispatch('changeGifts',prices);
           }
         }).catch(function(err){
           console.log(err);
@@ -307,12 +308,12 @@ export default {
       }
       gift.isSelected = !gift.isSelected;
 
-      this.$store.dispatch('changeGiftSelected',this.giftSelected);
+      this.$store.dispatch('changeGiftSelected',gift.id);
     },
     //奖品个数
     addCount (){
-      this.$store.dispatch('changeGiftNum',this.giftNum);
-      this.lastGiftNum=this.giftNum;
+      this.lastGiftNum++;
+      this.$store.dispatch('changeGiftNum',this.lastGiftNum);
     },
 
     //送礼
@@ -321,7 +322,6 @@ export default {
       this.$store.dispatch('changeGiftSelected',this.giftSelected);
       this.$store.dispatch('changelastGiftNum',lastGiftNum);
       if(window.localStorage.getItem("user")){
-        console.log('sendGift');
         this.$store.dispatch("sendGift",true);
       }
       else{

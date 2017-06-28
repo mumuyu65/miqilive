@@ -15,7 +15,7 @@ export default {
         },
 
         CHANGE_Gift_NUM(state, value) {
-            state.giftNum = value + 1;
+            state.giftNum = parseInt(value) + 1;
         },
 
         CHANGE_Gift_Selected(state, value) {
@@ -28,6 +28,14 @@ export default {
 
         SEND_GIFT(state, value) {
             state.sendGift = value;
+        },
+
+        CHANGE_GIFTS(state, value) {
+            state.gifts = value;
+        },
+
+        CHANGE_BEANS(state, value) {
+            state.user.Beans = value;
         }
 
 

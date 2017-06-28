@@ -14,3 +14,5 @@ export const getGiftSelected = state => state.giftSelected
 export const getLastGiftNum = state => state.lastGiftNum
 
 export const isSendGift = state => state.sendGift
+
+export const getGifts = state => state.gifts

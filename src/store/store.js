@@ -21,6 +21,7 @@ const state = {
     giftSelected: '',
     lastGiftNum: 1,
     sendGift: false,
+    gifts: [],
 }
 
 export default new Vuex.Store({
