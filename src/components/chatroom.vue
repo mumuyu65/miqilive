@@ -81,7 +81,9 @@ export default {
     this.UserLevel();  //用户等级
   },
    computed: mapGetters({
-      userOnline: 'getOnline'
+      userOnline: 'getOnline',
+      giftNum: 'getLastGiftNum',
+      giftSelected:'getGiftSelected',
   }),
   methods:{
     //聊天图标
@@ -100,6 +102,9 @@ export default {
          this.ConnSvr();
          this.user= JSON.parse(window.localStorage.getItem("user"));
       }
+
+      console.log(this.giftNum,this.giftSelected);
+
     },
 
     //用户等级

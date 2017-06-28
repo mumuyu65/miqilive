@@ -5,6 +5,12 @@ export const getLoginway = state => state.loginway
 
 export const getUser = state => state.user
 
-export const getIsLogin = state => state.islogin
-
 export const getOnline = state => state.userOnline
+
+export const getGiftNum = state => state.giftNum
+
+export const getGiftSelected = state => state.giftSelected
+
+export const getLastGiftNum = state => state.lastGiftNum
+
+export const isSendGift = state => state.sendGift

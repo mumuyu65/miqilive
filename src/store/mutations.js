@@ -10,11 +10,26 @@ export default {
             state.user = value
         },
 
-        CHANGE_ISLOGIN(state, value) {
-            state.islogin = value
-        },
-
         CHANGE_ONLINE_PEOPLE(state, value) {
             state.userOnline = value
+        },
+
+        CHANGE_Gift_NUM(state, value) {
+            state.giftNum = value + 1;
+        },
+
+        CHANGE_Gift_Selected(state, value) {
+            state.giftSelected = value
+        },
+
+        CHANGE_last_Gift_Num(state, value) {
+            state.lastGiftNum = value;
+        },
+
+        SEND_GIFT(state, value) {
+            state.sendGift = value;
         }
+
+
+
 }

@@ -231,18 +231,27 @@ import API from '@/api/API'
 //实例化api
 const api = new API();
 
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'SmallGame',
   data () {
     return {
         gifts: [],
-        giftNum: 1,
-        giftSelected:'',
     }
   },
   mounted (){
     this.initData();
     this.playZhibo();
+  },
+  computed: mapGetters({
+      giftNum: 'getGiftNum',
+      giftSelected: 'getGiftSelected'
+  }),
+  watch: {
+      giftNum: function (curVal,oldVal){
+　　　　　console.log(curVal,oldVal);
+　　　}
   },
   methods: {
     initData() {
@@ -265,6 +274,8 @@ export default {
         }).catch(function(err){
           console.log(err);
         });
+
+        this.lastGiftNum = this.giftNum;
     },
 
     //直播
@@ -300,16 +311,24 @@ export default {
       }
       gift.isSelected = !gift.isSelected;
 
-      this.giftSelected = gift;
+      this.$store.dispatch('changeGiftSelected',this.giftSelected);
     },
     //奖品个数
     addCount (){
-      this.giftNum++;
+      this.$store.dispatch('changeGiftNum',this.giftNum);
     },
 
     //送礼
     giftSend (){
-      console.log(this.giftSelected,this.giftNum);
+      let lastGiftNum=this.giftNum;
+      this.$store.dispatch('changeGiftSelected',this.giftSelected);
+      this.$store.dispatch('changelastGiftNum',lastGiftNum);
+      if(window.localStorage.getItem("user")){
+        this.$store.dispatch("sendGift",true);
+      }
+      else{
+        alert("未登录,不可以发送礼物的哦!");
+      }
     }
 
   },

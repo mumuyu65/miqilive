@@ -11,14 +11,16 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-    islogin: false,
     loginway: 'login',
     user: {
         Nick: '游客',
         Beans: 0,
     },
     userOnline: 0,
-    chatText: {}
+    giftNum: 1,
+    giftSelected: '',
+    lastGiftNum: 1,
+    sendGift: false,
 }
 
 export default new Vuex.Store({
