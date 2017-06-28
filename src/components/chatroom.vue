@@ -16,7 +16,7 @@
                     <li style="vertical-align: bottom"><h5>{{item.date}}</h5></li>
                     <li><h5>{{item.name}}</h5></li>
                   </ol>
-                  <h4>{{item.text}}</h4>
+                  <h4 v-html="item.text"></h4>
                 </div>
             </div>
         </div>
@@ -176,11 +176,9 @@ export default {
                     let rcvbody_28 = data.body;
                     let data_28 = JSON.parse(JSON.stringify(rcvbody_28));
                     console.log("进入房间后的反馈信息", data_28);
-                    that.$store.dispatch('changeOnlinePeople',data_28.data.userlist.length);
                     if (data_28.code == 100) {
-                        console.log(data_28.msg);
-                        var roomId = data_28.data.roomid;
-                        this.roomID = roomId;
+                        let roomId = data_28.data.roomid;
+                        that.roomID = roomId;
                     } else {
                         console.log(data.msg);
                     };
@@ -260,7 +258,7 @@ export default {
 
     //发送消息
     sendText (Message) {
-        console.log(Message);
+        console.log(Message,this.roomID);
         var body = '{"roomid":"' + this.roomID + '","message":"' + Message + '","type":"0"}';
         var pklen = body + 16;
         this.ws.send(JSON.stringify({
