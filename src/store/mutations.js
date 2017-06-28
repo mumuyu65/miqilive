@@ -34,10 +34,4 @@ export default {
             state.gifts = value;
         },
 
-        CHANGE_BEANS(state, value) {
-            state.user.Beans = value;
-        }
-
-
-
 }

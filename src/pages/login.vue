@@ -135,8 +135,7 @@ export default {
             api.register(data).then(function(res){
                 if(res.data.Code ==3){
                   $("#loginModal").modal("hide");
-                  that.$store.dispatch('changeUserName', res.data.Data.Nick);
-                  that.$store.dispatch('changeBeans', res.data.Data.Beans);
+                  that.$store.dispatch('changeUser', res.data.Data);
                   window.localStorage.setItem("user",JSON.stringify(res.data.Data));
                   alert(res.data.Msg);
                 }

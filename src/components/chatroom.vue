@@ -239,11 +239,13 @@ export default {
     },
     //长链接断开
     close (){
-        let that  = this;
+        let that = this;
         console.log("WebSocket Closed.");
 
         //2秒后启动重连
-        setTimeout("that.ConnSvr()", 2000);
+        setTimeout(function(){
+            that.ConnSvr();
+        }, 2000);
     },
 
     //长链接出错
@@ -431,9 +433,9 @@ export default {
 
         let obj=JSON.parse(window.localStorage.getItem("user"));
 
-        obj.Beans=parseInt(this.user.Beans) - parseInt(giftPrice) * parseInt(giftCount);
+        obj.Beans -=parseInt(giftPrice) * parseInt(giftCount);
 
-        this.$store.dispatch('changeBeans',(parseInt(this.user.Beans) - parseInt(giftPrice) * parseInt(giftCount)));
+        this.$store.dispatch('changeUser',obj);
 
         window.localStorage.setItem('user',JSON.stringify(obj));
 
