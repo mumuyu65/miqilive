@@ -37,6 +37,11 @@ class API {
         return axios.post('/gusmrk/level/query', {}, config);
     }
 
+    getNews(param) {
+        config.data = param;
+        return axios.post('https://api.yddtv.cn:9002/cctv/news/query', {}, config);
+    }
+
 
 }
 export default API;

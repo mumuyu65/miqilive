@@ -48,9 +48,3 @@ export const changeGifts = ({
 }, value) => {
     commit('CHANGE_GIFTS', value)
 }
-
-export const changeBeans = ({
-    commit
-}, value) => {
-    commit('CHANGE_BEANS', value)
-}

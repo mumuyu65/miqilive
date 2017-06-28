@@ -432,13 +432,6 @@ a:visited,a:link,a:focus{
     display: none;
 }
 
-.daozhibo .zj-list .media{
-    background-color:#fff;
-    color:#000;
-    border:1px solid #ececec;
-    padding:0 10px;
-}
-
 .daozhibo .zj-list .media p{
     margin:10px 0;
 }
