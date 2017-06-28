@@ -99,6 +99,9 @@ export default {
   methods:{
     init (){
       if(window.localStorage.getItem("user")){
+        if (this.user.Beans.length > 7) {
+            this.user.Beans = parseInt(this.user.Beans) % 10000 + '万';
+        }
         this.$store.dispatch('changeUser',JSON.parse(window.localStorage.getItem("user")));
      }
     },
