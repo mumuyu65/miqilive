@@ -1,28 +1,28 @@
 <template>
   <div class="main news">
     <div class="zj-list">
-        <div class="inner-container">
-          <ul class="list-inline">
-            <li><h4>新闻</h4></li>
-            <li class="pull-right">
-              <router-link to="/" style="color:#fff; text-decoration:none;"><h4 style=" opacity:0.5;">全部文章</h4></router-link></li>
-          </ul>
-          <ol class="list-unstyled">
-            <li v-for="report in economicNews " class="report-item" @click="showContent(report)" v-bind:class="{ active: report.isActive }">
-                <div class="media">
-                    <a class="media-left">
-                        <img src="../../static/images/flag.png" alt="旗帜" class="flag"/>
-                    </a>
-                    <div class="media-body">
-                    <h4 class="media-heading">
-                        <a>{{report.title}}</a>
-                    </h4>
-                    <p v-html="report.content"></p>
-                    </div>
-                </div>
-            </li>
-          </ol>
-        </div>
+      <div class="inner-container">
+        <ul class="list-inline">
+          <li><h4>新闻</h4></li>
+          <li class="pull-right">
+            <router-link to="/" style="color:#fff; text-decoration:none;"><h4 style="opacity:0.5;" exact>全部文章</h4></router-link></li>
+        </ul>
+        <ol class="list-unstyled">
+          <li v-for="report in economicNews " class="report-item" @click="showContent(report)" v-bind:class="{ active: report.isActive }">
+              <div class="media">
+                  <a class="media-left">
+                      <img src="../../static/images/flag.png" alt="旗帜" class="flag"/>
+                  </a>
+                  <div class="media-body">
+                  <h4 class="media-heading">
+                      <a>{{report.title}}</a>
+                  </h4>
+                  <p v-html="report.content"></p>
+                  </div>
+              </div>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="zhibo">
         <div class="report-content">
@@ -30,6 +30,16 @@
             <h3 class="text-center">{{selectedNews.title}}</h3>
         </div>
         <div class="report-divider"></div>
+        <!--新浪微博等-->
+        <ol class="list-inline" style="padding:0 10px;">
+            <li><h6>发布日期：{{selectedNews.unix | dateStamp}}</h6></li>
+            <li class="pull-right" style="margin-top:10px;">
+                <a href="#"><img src="../../static/images/qq.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/sina.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/qqzone.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/wechat.png" style="width:20px;"/></a>
+            </li>
+        </ol>
         <div class="report-text">
             <img v-bind:src="selectedNews.imgurl" class="pull-left"/>
             <h5 v-html="selectedNews.content" ></h5>
@@ -53,6 +63,27 @@ export default {
         economicNews:[],
         selectedNews:{},
     }
+  },
+  filters: {
+      dateStamp (value){
+        //获取一个事件戳
+         let time = new Date(parseInt(value)*1000);
+         //获取年份信息
+         let y = time.getFullYear();
+         //获取月份信息，月份是从0开始的
+         let m =(time.getMonth()+1)<10?'0'+(time.getMonth()+1):(time.getMonth()+1);
+         let d = time.getDate();
+            d=d<10?'0'+d:d;
+
+         let H=time.getHours();
+            H=H<10?'0'+H:H
+
+         let M=time.getMinutes();
+            M=M<10?'0'+M:M
+            value=y+'-'+m + '-' + d+'  '+H+":"+M;
+         //返回拼接信息
+         return value;
+      }
   },
   mounted (){
     this.initData();
@@ -93,13 +124,12 @@ export default {
         }
         item.isActive = true ;
         this.selectedNews= item;
-    }
+    },
   }
 }
 </script>
 
 <style scoped>
-
     .news .flag{
         width:33px;
         height:33px;
@@ -145,7 +175,7 @@ export default {
     .news .zhibo .report-text{
         margin-top:30px;
         padding:0 10px;
-        height:655px;
+        height:625px;
         overflow-y:auto;
     }
 
@@ -171,5 +201,4 @@ export default {
     .news .zhibo .report-text>h5{
         opacity:0.9;
     }
-
 </style>

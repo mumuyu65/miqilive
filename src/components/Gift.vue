@@ -66,11 +66,6 @@ export default {
   }),
   methods: {
     initData() {
-        //轮播图
-         $('#myCarousel').carousel({
-            interval: 2000
-        });
-
         //奖品展示
         let that = this;
         api.getGift().then(function(res){
