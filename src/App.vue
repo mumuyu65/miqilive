@@ -24,7 +24,3 @@ export default {
   components: { mqHeader,SiderBar,ChatRoom }
 }
 </script>
-
-<style scoped>
-
-</style>

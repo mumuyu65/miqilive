@@ -250,5 +250,4 @@ export default {
 .zhibo-carousel .carousel-inner .item>img{
   height:450px;
 }
-
 </style>
