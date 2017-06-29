@@ -31,8 +31,8 @@
         </div>
         <div class="report-divider"></div>
         <div class="report-text">
-            <img v-bind:src="selectedNews.imgurl" class="pull-left" style="margin: 0 10px 10px 10px; width:506px; height:370px;"/>
-            <h5 v-html="selectedNews.content" style=" opacity:0.9;" ></h5>
+            <img v-bind:src="selectedNews.imgurl" class="pull-left"/>
+            <h5 v-html="selectedNews.content" ></h5>
         </div>
         <gift></gift>
     </div>
@@ -147,6 +147,29 @@ export default {
         padding:0 10px;
         height:655px;
         overflow-y:auto;
+    }
+
+    .news .zhibo .report-text::-webkit-scrollbar{
+        width:10px;
+        height:5px;
+        background-color: #000;
+    }
+
+    .news .zhibo .report-text::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #4b4b4b;
+        width:5px;
+    }
+
+    .news .zhibo .report-text>img{
+         margin: 0 10px 10px 10px;
+         width:506px;
+         height:370px;
+    }
+
+    .news .zhibo .report-text>h5{
+        opacity:0.9;
     }
 
 </style>
