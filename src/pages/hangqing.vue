@@ -24,7 +24,7 @@
         <div class="divider"></div>
         <div class="sub-menu">
             <ul class="list-inline sub-menu-inner">
-               <li v-for="bourse in BoursesList" v-bind:class="{ active:bourse.isActive}" @click="toggleBourse(bourse)">
+               <li v-for="bourse in BoursesList" v-bind:class="{ active:bourse.isActive}" @click="hqBoursesDetails(bourse)">
                     <h5>{{bourse.cn}}</h5>
                 </li>
             </ul>
@@ -46,7 +46,26 @@
             <li><h5>成交量</h5></li>
         </ul>
         <div class="divider"></div>
-        <div class="hq-list-detail" id="hq_accordian"></div>
+        <div class="hq-list-detail" id="hq_accordian">
+            <div class="hq-item">
+            <ul class="list-inline hq-list">
+                <li><h4>法 DAX指</h4><h5>DAX</h5></li>
+                <li><h4>12606.3</h4></li>
+                <li><h4 class="active">-0.0032</h4></li>
+                <li><h4>0</h4><span class="caret" data-key="0" data-smcd="DAX" data-toggle="collapse" data-parent="#hq_accordian" href="#collapse_0"></span></li>
+            </ul>
+            <div id="collapse_0" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div id="echart_0" style="width: 360px;height:250px; padding:10px;"></div>
+                    <ul class="list-inline date-select">
+                        <li data-unix="0">1分钟</li><li data-unix="1">5分钟</li>
+                        <li data-unix="2">15分钟</li><li data-unix="4">1小时</li>
+                        <li data-unix="5">4小时</li><li data-unix="6">1天</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
       </div>
     </div>
     <div class="zhibo">
@@ -62,6 +81,8 @@ const api = new API();
 
 import axios from 'axios'
 
+const hq_endpoint='http://58.220.31.241:8006'
+
 export default {
   name: 'HangQing',
   data () {
@@ -69,6 +90,8 @@ export default {
         BoursesList:[],
 
         hqStatics:[],
+
+
     }
   },
 
@@ -81,7 +104,7 @@ export default {
   methods:{
     hqBoursesList (){
         let that = this;
-        axios.post('http://58.220.31.241:8006/quotes/exchanges','').then(function (res) {
+        axios.post(hq_endpoint+'/quotes/exchanges','').then(function (res) {
                 if(res.data.code == 100){
                     let TempObj= res.data.data;
                     for(let i =0 ; i<TempObj.length; i++){
@@ -89,6 +112,7 @@ export default {
                     }
                     that.BoursesList =TempObj;
                     that.BoursesList[0].isActive= true;
+                    that.hqBoursesDetails(that.BoursesList[0]);
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -103,9 +127,9 @@ export default {
         item.isActive = true;
     },
 
-     hqVirtualData: function() {
+    hqVirtualData() {
         //上证指数、美原油连、伦敦金数据初始化
-        var params = [{
+        let params = [{
             "excd": "XSHGZS",
             "smcd": "000001"
         }, {
@@ -118,7 +142,7 @@ export default {
 
         let that =this;
 
-        axios.post('http://58.220.31.241:8006/quotes/getSymbolesInit', JSON.stringify(params)).then(function(result) {
+        axios.post(hq_endpoint+'/quotes/getSymbolesInit', JSON.stringify(params)).then(function(result) {
             if(result.data.code == 100){
                 let templateObj = result.data.data;
                 var len = templateObj.length;
@@ -151,6 +175,44 @@ export default {
                 }
                 that.hqStatics = templateObj;
              }
+        }).catch(function (error) {
+                console.log(error);
+            });
+    },
+
+    hqBoursesDetails: function(item) {
+        //各股市的股票详情
+        let params = {
+            "excd": item.code,
+        };
+
+        axios.post(hq_endpoint+'/quotes/getInitSymboles',JSON.stringify(params)).then(function(res){
+            console.log(res);
+            if(res.data.code == 100){
+                let obj = res.data.data;
+                let len = obj.length;
+                for (let i = 0; i < len; i++) {
+                        let plus, increasement;
+                        if (parseFloat(obj[i].quo.last_price) !== 0 && parseFloat(obj[i].quo.prev_close_price) !== 0) {
+                            increasement = ((parseFloat(obj[i].quo.last_price) - parseFloat(obj[i].quo.prev_close_price)) / parseFloat(obj[i].quo.prev_close_price)).toFixed(4);
+                        } else if (parseFloat(obj[i].quo.last_price) == 0) {
+                            increasement = 0;
+                        } else if (parseFloat(obj[i].quo.prev_close_price) == 0) {
+                            increasement = '--';
+                        }
+
+                        if (increasement >= 0) {
+                            plus = '';
+                        } else {
+                            plus = 'active';
+                        }
+
+
+
+                    }
+
+
+            }
         }).catch(function (error) {
                 console.log(error);
             });
