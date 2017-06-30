@@ -46,33 +46,48 @@
             <li><h5>成交量</h5></li>
         </ul>
         <div class="divider"></div>
-        <div class="hq-list-detail" id="hq_accordian">
-            <div class="hq-item">
-            <ul class="list-inline hq-list">
-                <li><h4>法 DAX指</h4><h5>DAX</h5></li>
-                <li><h4>12606.3</h4></li>
-                <li><h4 class="active">-0.0032</h4></li>
-                <li><h4>0</h4><span class="caret" data-key="0" data-smcd="DAX" data-toggle="collapse" data-parent="#hq_accordian" href="#collapse_0"></span></li>
-            </ul>
-            <div id="collapse_0" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <div id="echart_0" style="width: 360px;height:250px; padding:10px;"></div>
-                    <ul class="list-inline date-select">
-                        <li data-unix="0">1分钟</li>
-                        <li data-unix="1">5分钟</li>
-                        <li data-unix="2">15分钟</li>
-                        <li data-unix="4">1小时</li>
-                        <li data-unix="5">4小时</li>
-                        <li data-unix="6">1天</li>
-                    </ul>
-                </div>
+        <div class="hq-list-detail">
+            <div class="hq-item" v-for="(bourseDetail,index) in BoursesDetails" @click="hqhistoryData(bourseDetail,index)"
+                 v-bind:class="{active:bourseDetail.isActive}">
+                <ul class="list-inline hq-list">
+                    <li><h4>{{bourseDetail.sNM}}</h4><h5>{{bourseDetail.sCD}}</h5></li>
+                    <li><h4>{{bourseDetail.quo.last_price }}</h4></li>
+                    <li><h4 v-bind:class="{active:bourseDetail.flag}">{{bourseDetail.increase}}</h4></li>
+                    <li><h4>{{bourseDetail.quo.deal }}</h4>
+                    </li>
+                </ul>
             </div>
-        </div>
         </div>
       </div>
     </div>
     <div class="zhibo">
-
+        <div style="padding:0 10px;">
+            <h6>行情/k线图</h6>
+            <h3 class="text-center">{{selectedHq.sNM}}</h3>
+        </div>
+        <div class="report-divider"></div>
+        <!--新浪微博等-->
+        <ol class="list-inline" style="padding:0 10px;">
+            <li class="pull-right" style="margin-top:10px;">
+                <a href="#"><img src="../../static/images/qq.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/sina.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/qqzone.png" style="width:20px;"/></a>
+                <a href="#"><img src="../../static/images/wechat.png" style="width:20px;"/></a>
+            </li>
+        </ol>
+        <div id="main" style="width:858px; height:650px; margin:50px 0; padding:30px;"></div>
+        <ul class="list-inline hq-select-time text-center">
+            <li><button class="btn btn-danger">1分钟</button></li>
+            <li><button class="btn btn-default">5分钟</button></li>
+            <li><button class="btn btn-default">15分钟</button></li>
+            <li><button class="btn btn-default">30分钟</button></li>
+            <li><button class="btn btn-default">1小时</button></li>
+            <li><button class="btn btn-default">4小时</button></li>
+            <li><button class="btn btn-default">1天</button></li>
+            <li><button class="btn btn-default">1周</button></li>
+            <li><button class="btn btn-default">1个月</button></li>
+            <li><button class="btn btn-default">3个月</button></li>
+        </ul>
     </div>
   </div>
 </template>
@@ -86,6 +101,8 @@ import axios from 'axios'
 
 const hq_endpoint='http://58.220.31.241:8006'
 
+import echarts from 'echarts'
+
 export default {
   name: 'HangQing',
   data () {
@@ -94,7 +111,13 @@ export default {
 
         hqStatics:[],
 
+        BoursesDetails:[],
 
+        myEchart:{},
+
+        echartLastTime:'',
+
+        selectedHq:{},
     }
   },
 
@@ -102,6 +125,8 @@ export default {
     this.hqBoursesList();
 
     this.hqVirtualData();
+
+    this.myEchart = echarts.init(document.getElementById('main'));
   },
 
   methods:{
@@ -120,14 +145,6 @@ export default {
             }).catch(function (error) {
                 console.log(error);
             });
-    },
-
-    toggleBourse(item){
-        for(let i =0 ; i<this.BoursesList.length; i++){
-            this.BoursesList[i].isActive = false;
-        }
-
-        item.isActive = true;
     },
 
     hqVirtualData() {
@@ -189,31 +206,45 @@ export default {
             "excd": item.code,
         };
 
+        for(let i =0 ; i<this.BoursesList.length; i++){
+            this.BoursesList[i].isActive = false;
+        }
+
+        item.isActive = true;
+
+        let that = this;
+
         axios.post(hq_endpoint+'/quotes/getInitSymboles',JSON.stringify(params)).then(function(res){
-            console.log(res);
             if(res.data.code == 100){
                 let obj = res.data.data;
                 let len = obj.length;
                 for (let i = 0; i < len; i++) {
-                        let plus, increasement;
-                        if (parseFloat(obj[i].quo.last_price) !== 0 && parseFloat(obj[i].quo.prev_close_price) !== 0) {
-                            increasement = ((parseFloat(obj[i].quo.last_price) - parseFloat(obj[i].quo.prev_close_price)) / parseFloat(obj[i].quo.prev_close_price)).toFixed(4);
-                        } else if (parseFloat(obj[i].quo.last_price) == 0) {
-                            increasement = 0;
-                        } else if (parseFloat(obj[i].quo.prev_close_price) == 0) {
-                            increasement = '--';
-                        }
-
-                        if (increasement >= 0) {
-                            plus = '';
-                        } else {
-                            plus = 'active';
-                        }
-
-
-
+                    let plus, increasement;
+                    if (parseFloat(obj[i].quo.last_price) !== 0 && parseFloat(obj[i].quo.prev_close_price) !== 0) {
+                        increasement = ((parseFloat(obj[i].quo.last_price) - parseFloat(obj[i].quo.prev_close_price)) / parseFloat(obj[i].quo.prev_close_price)).toFixed(4);
+                    } else if (parseFloat(obj[i].quo.last_price) == 0) {
+                        increasement = 0;
+                    } else if (parseFloat(obj[i].quo.prev_close_price) == 0) {
+                        increasement = '--';
                     }
 
+                    if (increasement >= 0) {
+                        plus = '';
+                    } else {
+                        plus = 'active';
+                    }
+                    obj[i].increase= increasement;
+
+                    obj[i].flag= plus;
+
+                    obj[i].isActive = false;
+
+                }
+                    that.BoursesDetails = obj;
+
+                    that.BoursesDetails[0].isActive = true;
+
+                    that.hqhistoryData(that.BoursesDetails[0],0);
 
             }
         }).catch(function (error) {
@@ -221,6 +252,203 @@ export default {
             });
     },
 
+    showEcharts(Arr,key,newData){
+       let arr = Arr.sort(this.compare('stime'));
+
+       if (!newData) {
+            this.echartLastTime = arr[0].stime;
+        } else {
+            this.echartLastTime = newData.time;
+            let arr_len = arr.length - 1;
+            switch (newData.type) {
+                case '26':
+                    arr.push({
+                        stime: newData.time,
+                        oprice: arr[arr_len].oprice,
+                        cprice: arr[arr_len].cprice,
+                        lprice: arr[arr_len].lprice,
+                        hprice: newData.value
+                    });
+                    break;
+                case '27':
+                    arr.push({
+                        stime: newData.time,
+                        oprice: arr[arr_len].oprice,
+                        cprice: arr[arr_len].cprice,
+                        lprice: newData.value,
+                        hprice: arr[arr_len].hprice
+                    });
+                    break;
+            }
+        }
+
+        let rawData = [],
+            dates, data;
+        rawData = arr.reverse();
+
+        let that = this;
+
+        dates = rawData.map(function(item) {
+            return that.hqDateStamp(item.stime);
+        });
+        data = rawData.map(function(item) {
+            return [+item.oprice, +item.cprice, +item.lprice, +item.hprice];
+        });
+
+
+         var option = {
+            backgroundColor: '#000',
+            legend: {
+                data: [],
+                inactiveColor: '#777',
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    animation: false,
+                    type: 'cross',
+                    lineStyle: {
+                        color: '#376df4',
+                        width: 2,
+                        opacity: 1
+                    }
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: dates, //时间
+                axisLine: {
+                    lineStyle: {
+                        color: '#8392A5'
+                    }
+                }
+            },
+            yAxis: {
+                scale: true,
+                axisLine: {
+                    lineStyle: {
+                        color: '#8392A5'
+                    }
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#8392A5'
+                    }
+                },
+                position: 'right',
+                axisTick: {
+                    show: false
+                },
+            },
+            grid: {
+                bottom: 50,
+                right: 50,
+                left:50,
+                top: 50
+            },
+            dataZoom: [{
+                type: 'inside',
+                show: 'true',
+            }],
+            animation: false,
+            series: [{
+                type: 'candlestick',
+                name: '日K',
+                data: data,
+                dimensions: ['date', '开盘价', '收盘价', '最低价', '最高价'],
+                itemStyle: {
+                    normal: {
+                        color: '#FD1050',
+                        color0: '#23d7e3',
+                        borderColor: '#FD1050',
+                        borderColor0: '#23d7e3'
+                    }
+                }
+            }]
+        };
+
+        this.myEchart.setOption(option);
+    },
+
+    hqhistoryData(obj, key) {
+         for(let i =0 ; i<this.BoursesDetails.length; i++){
+            this.BoursesDetails[i].isActive = false;
+         }
+        obj.isActive = true;
+
+        this.selectedHq = obj;
+
+        let params = {
+                "excd": obj.exCD,
+                "smcd": obj.sCD,
+                "unixtm": 0,
+                "unit": 0,
+                "count": 100
+            };
+
+        let that = this;
+        axios.post(hq_endpoint+'/quotes/queryKLine', JSON.stringify(params)).then(function(res) {
+            if (res.data.code == 100) {
+                that.showEcharts(res.data.data, key,'');
+            }
+        }).catch(function (error) {
+                console.log(error);
+            });
+    },
+    //数组排序
+     compare (property) {
+        return function(a, b) {
+            var value1 = a[property];
+            var value2 = b[property];
+            return value2 - value1;
+        }
+    },
+
+    hqDateStamp (tm) {
+        var timestamp = tm;
+        if (/^\d{10}$/.test(timestamp)) {
+            timestamp *= 1000;
+        } else if (/^\d{13}$/.test(timestamp)) {
+            timestamp = parseInt(timestamp);
+        } else {
+            return;
+        }
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = (time.getMonth() + 1) > 9 && (time.getMonth() + 1) || ('0' + (time.getMonth() + 1))
+        var date = time.getDate() > 9 && time.getDate() || ('0' + time.getDate())
+        var hour = time.getHours() > 9 && time.getHours() || ('0' + time.getHours())
+        var minute = time.getMinutes() > 9 && time.getMinutes() || ('0' + time.getMinutes())
+        var second = time.getSeconds() > 9 && time.getSeconds() || ('0' + time.getSeconds())
+        var YmdHis = year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second;
+        return YmdHis;
+    },
+
   },
 }
 </script>
+
+<style scoped>
+    .hq-item{
+        cursor:pointer;
+        padding:0 5px;
+    }
+    .hq-item.active{
+        background-color:#4b4b4b;
+    }
+
+    .report-divider{
+        width:100%;
+        height:2px;
+        background-color:#4B4B4B;
+        margin-top:40px;
+    }
+
+    .hq-select-time>li{
+        margin-right:12px;
+    }
+</style>

@@ -105,7 +105,6 @@ export default {
     initChat (){
       if(window.localStorage.getItem("user")){
          this.ConnSvr();
-         this.user= JSON.parse(window.localStorage.getItem("user"));
       }
     },
 
@@ -135,7 +134,7 @@ export default {
 
     //发送内容
     sendContent (){
-       if(this.user){
+       if(window.localStorage.getItem("user")){
             if(this.chatContent){
                  this.sendText(this.chatContent);
                  this.chatContent = '';
@@ -195,6 +194,7 @@ export default {
                     let rcvbody_8 = data.body;
                     console.log("用户认证成功!");
                     // 启动计时器发送心跳包
+                    that.heartbeat();
                     let timer = setInterval(function() {
                         that.heartbeat();
                     }, 20000);
