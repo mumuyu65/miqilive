@@ -58,9 +58,12 @@
                 <div class="accordion-inner">
                     <div id="echart_0" style="width: 360px;height:250px; padding:10px;"></div>
                     <ul class="list-inline date-select">
-                        <li data-unix="0">1分钟</li><li data-unix="1">5分钟</li>
-                        <li data-unix="2">15分钟</li><li data-unix="4">1小时</li>
-                        <li data-unix="5">4小时</li><li data-unix="6">1天</li>
+                        <li data-unix="0">1分钟</li>
+                        <li data-unix="1">5分钟</li>
+                        <li data-unix="2">15分钟</li>
+                        <li data-unix="4">1小时</li>
+                        <li data-unix="5">4小时</li>
+                        <li data-unix="6">1天</li>
                     </ul>
                 </div>
             </div>
@@ -221,7 +224,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>
