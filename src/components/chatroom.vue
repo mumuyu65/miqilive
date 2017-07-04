@@ -111,6 +111,11 @@ export default {
         }
     },
 
+    //清屏
+    clear(){
+        this.chatInner = [];
+    },
+
     //用户等级
     UserLevel (){
       let that =this;

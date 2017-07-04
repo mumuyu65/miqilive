@@ -14,10 +14,10 @@
                       <img src="../../static/images/flag.png" alt="旗帜" class="flag"/>
                   </a>
                   <div class="media-body">
-                  <h4 class="media-heading">
-                      <a>{{report.title}}</a>
-                  </h4>
-                  <p v-html="report.content"></p>
+                    <h4 class="media-heading">
+                        <a>{{report.title}}</a>
+                    </h4>
+                    <p v-html="report.content"></p>
                   </div>
               </div>
           </li>
