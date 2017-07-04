@@ -105,8 +105,10 @@ export default {
 
     //初始化聊天室
     initChat (){
-        this.user=JSON.parse(window.localStorage.getItem("user"));
-        this.ConnSvr();
+        if(this.isLogin){
+            this.user=JSON.parse(window.localStorage.getItem("user"));
+            this.ConnSvr();
+        }
     },
 
     //用户等级

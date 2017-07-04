@@ -7,7 +7,7 @@
             <li class="pull-right">
               <router-link to="/shopmall" style="color:#fff; text-decoration:none;"><h4>积分商城</h4></router-link></li>
           </ul>
-           <iframe src="" width="760px" frameborder="0" height="1300px" scrolling="yes" id="small_game" ></iframe>
+           <iframe src="http://yingdedao.com" width="760px" frameborder="0" height="1300px" scrolling="yes" id="small_game" ></iframe>
              <div class="small-game">
                 <ul id="myTab" class="list-inline">
                     <li class="active">
@@ -199,6 +199,8 @@ export default {
   name: 'SmallGame',
   mounted (){
     this.initData();
+
+    this.zoomEle(document.getElementById("small_game"),0.47,0.47);
   },
   components:{ Gift },
   methods: {
@@ -232,6 +234,33 @@ export default {
          $('#myCarousel').carousel({
             interval: 2000
         });
+    },
+
+    getBrowser() {
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera){return "Opera"}; //判断是否Opera浏览器
+        if (userAgent.indexOf("Firefox") > -1){return "FF";} //判断是否Firefox浏览器
+        if (userAgent.indexOf("Safari") > -1){return "Safari";} //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera){return "IE";} ;
+        //判断是否IE浏览器
+    },
+
+    zoomEle(el, xScale, yScale) {
+        var name = this.getBrowser();
+        var style = el.getAttribute('style') || "";
+        if(name=="IE") {
+            if(document.compatMode == "CSS1Compat"){//模式匹配 解决ie8下兼容模式
+                el.style.width = el.clientWidth * 2.0;
+                el.style.height = el.clientHeight * 2.0;
+            }
+            el.style.zoom = xScale;
+        }else if(name=="FF"){
+            el.style.transform = 'scale(' + xScale + ', ' + yScale + ')';
+            el.style.transformOrigin = '0px 0px';
+        }else {
+            el.setAttribute('style', style + '-webkit-transform: scale(' + xScale + ', ' +  yScale + '); -webkit-transform-origin: 0px 0px;');
+        }
     },
   },
 
