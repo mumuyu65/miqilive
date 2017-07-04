@@ -85,10 +85,12 @@ export default {
       giftNum: 'getLastGiftNum',
       giftSelected:'getGiftSelected',
       sendGift:'isSendGift',
-      giftArr:'getGifts'
+      giftArr:'getGifts',
+      isLogin:'getLogin'
   }),
   watch:{
-    sendGift:'chatGift'
+    sendGift:'chatGift',
+    isLogin:'initChat'
   },
   methods:{
     //聊天图标
@@ -103,9 +105,8 @@ export default {
 
     //初始化聊天室
     initChat (){
-      if(window.localStorage.getItem("user")){
-         this.ConnSvr();
-      }
+        this.user=JSON.parse(window.localStorage.getItem("user"));
+        this.ConnSvr();
     },
 
     //用户等级
@@ -175,15 +176,15 @@ export default {
 
     ConnSvr (){
         var that = this;
-        this.ws = new WebSocket("ws://58.220.31.244:57081/sub");
+        that.ws = new WebSocket("ws://58.220.31.244:57081/sub");
 
-        this.ws.onopen = function() {
+        that.ws.onopen = function() {
             console.log("conn succeed.");
 
             that.confirmUser(); //用户认证消息
         };
 
-        this.ws.onmessage = function(evt) {
+        that.ws.onmessage = function(evt) {
             let receives = JSON.parse(evt.data); //从字符窜中解析出json对象
             let data = receives[0];
             switch (data.op) {
@@ -194,10 +195,9 @@ export default {
                     let rcvbody_8 = data.body;
                     console.log("用户认证成功!");
                     // 启动计时器发送心跳包
-                    that.heartbeat();
-                    let timer = setInterval(function() {
+                    var timer = setInterval(function() {
                         that.heartbeat();
-                    }, 20000);
+                     }, 20000);
                     that.enterRoom();
                     break;
                 case 24:
@@ -234,8 +234,8 @@ export default {
                     break;
             }
         };
-        this.ws.onclose = this.close;
-        this.ws.onerror = this.error;
+        that.ws.onclose = that.close;
+        that.ws.onerror = that.error;
     },
     //长链接断开
     close (){
@@ -257,6 +257,9 @@ export default {
     confirmUser (){
         let sid = this.user.SessionId;
         let uid = this.user.UserId;
+
+        console.log(sid,uid);
+
 
         // 发送认证消息
         let body = '{"uid":"' + uid + '","sessionid":"' + sid + '","platform":"4"}';
@@ -299,17 +302,21 @@ export default {
 
     //发送消息
     sendText (Message) {
-        console.log(Message,this.roomID);
-        var body = '{"roomid":"' + this.roomID + '","message":"' + Message + '","type":"0"}';
-        var pklen = body + 16;
-        this.ws.send(JSON.stringify({
-            'pklen': pklen,
-            'klen': 16,
-            'ver': 1,
-            'op': 23,
-            'id': 4,
-            'body': JSON.parse(body)
-        }));
+        if(this.ws){
+            var body = '{"roomid":"' + this.roomID + '","message":"' + Message + '","type":"0"}';
+            var pklen = body + 16;
+            this.ws.send(JSON.stringify({
+                'pklen': pklen,
+                'klen': 16,
+                'ver': 1,
+                'op': 23,
+                'id': 4,
+                'body': JSON.parse(body)
+            }));
+        }else{
+            this.ConnSvr();
+        }
+
     },
 
     personInformation (Data) {

@@ -16,3 +16,5 @@ export const getLastGiftNum = state => state.lastGiftNum
 export const isSendGift = state => state.sendGift
 
 export const getGifts = state => state.gifts
+
+export const getLogin = state => state.isLogin

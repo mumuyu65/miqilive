@@ -1,8 +1,10 @@
+//var LSS_SITE = 'http://192.168.1.62/amytest/aodianplayer';
+var LSS_SITE = 'http://cdn.aodianyun.com';
+var lssPlayerLoad = false;
+var hlsPlayerLoad = false;
+var AODIANPLAY_UUID_BASE = 0;
+
 export function aodianPlayer(conf) {
-    var LSS_SITE = 'http://cdn.aodianyun.com';
-    var lssPlayerLoad = false;
-    var hlsPlayerLoad = false;
-    var AODIANPLAY_UUID_BASE = 0;
     var lssFunName, lssFunInterval, hlsFunName, hlsFunInterval, html5FunName, html5FunInterval;
     var conf = conf;
     if (!conf.container || conf.container == "") {

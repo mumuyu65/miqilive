@@ -34,4 +34,8 @@ export default {
             state.gifts = value;
         },
 
+        CHANGE_Login(state, value) {
+            state.isLogin = value;
+        }
+
 }

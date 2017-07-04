@@ -22,6 +22,7 @@ const state = {
     lastGiftNum: 1,
     sendGift: false,
     gifts: [],
+    isLogin: false,
 }
 
 export default new Vuex.Store({

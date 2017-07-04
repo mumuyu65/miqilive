@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import * as aodianPlayer from '@/js/aodianyun.js'
+import * as Player from '@/js/aodianyun.js'
 
 import Gift from '@/components/Gift'
 
@@ -208,7 +208,7 @@ export default {
       api.getZhibo().then(function(res){
         if(res.data.Code ==3){
           let url = res.data.Data[0].url;
-          let objectPlayer = new aodianPlayer({
+          let objectPlayer = new Player.aodianPlayer({
               container: 'player', //播放器容器ID，必要参数
               rtmpUrl: url, //控制台开通的APP rtmp地址，必要参数
               width: '858', //播放器宽度，可用数字、百分比等
@@ -220,6 +220,7 @@ export default {
               controlbardisplay: 'enable', //是否显示控制栏，值为：disable、enable默认为disable。
               isfullscreen: true, //是否双击全屏，默认为true
           });
+
         }else {
               alert("无法请求到直播地址......");
           }

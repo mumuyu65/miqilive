@@ -48,3 +48,10 @@ export const changeGifts = ({
 }, value) => {
     commit('CHANGE_GIFTS', value)
 }
+
+
+export const changeLogin = ({
+    commit
+}, value) => {
+    commit('CHANGE_Login', value)
+}

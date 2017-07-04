@@ -97,6 +97,7 @@ export default {
           if(res.data.Code ==3){
             $("#loginModal").modal("hide");
             that.$store.dispatch('changeUser', res.data.Data);
+            that.$store.dispatch('changeLogin', true);
             window.localStorage.setItem("user",JSON.stringify(res.data.Data));
             alert(res.data.Msg);
           }
