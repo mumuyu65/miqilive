@@ -34,10 +34,10 @@
         <ol class="list-inline" style="padding:0 10px;">
             <li><h6>发布日期：{{selectedNews.unix | dateStamp}}</h6></li>
             <li class="pull-right" style="margin-top:10px;">
-                <a href="#"><img src="../../static/images/qq.png" style="width:20px;"/></a>
-                <a href="#"><img src="../../static/images/sina.png" style="width:20px;"/></a>
-                <a href="#"><img src="../../static/images/qqzone.png" style="width:20px;"/></a>
-                <a href="#"><img src="../../static/images/wechat.png" style="width:20px;"/></a>
+                <a href="http://wpa.qq.com/msgrd?v=3&uin=571014594&site=qq&menu=yes"><img src="../../static/images/qq.png" style="width:20px;"/></a>
+                <a href="http://weibo.com/yuyangyang0712/profile?rightmod=1&wvr=6&mod=personinfo"><img src="../../static/images/sina.png" style="width:20px;"/></a>
+                <a href="https://user.qzone.qq.com/571014594"><img src="../../static/images/qqzone.png" style="width:20px;"/></a>
+                <a style="cursor:pointer;" onclick="alert('欢迎加我微信，微信号yu18718525290!')"><img src="../../static/images/wechat.png" style="width:20px;"/></a>
             </li>
         </ol>
         <div class="report-text">

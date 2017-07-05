@@ -6,56 +6,56 @@
               <li class="report-item" >
                   <div class="media">
                       <a class="media-left">
-                          <img alt="中阳证券" src="../../static/images/zhongyang.png" style="width:50px;"/>
+                          <img alt="中阳证券" src="../../static/images/zhongyang.png" style="width:50px; margin-left:10px;"/>
                       </a>
                       <div class="media-body">
                         <h2 class="media-heading">
                             中阳期货
                         </h2>
                         <h6>综合金融服务，一站式理财平台</h6>
-                        <h6 class="pull-right" style="color:#f00; cursor:pointer;">立即开户</h6>
+                        <a class="pull-right" target="_blank" style="color:#f00;font-size:20px;" href="http://www.zyzq.com.hk/index.php?m=content&c=index&a=lists&catid=90">立即开户</a>
                       </div>
                   </div>
               </li>
               <li class="report-item" >
                   <div class="media">
                       <a class="media-left">
-                          <img alt="中阳证券" src="../../static/images/xinhu.png" style="width:70px;"/>
+                          <img alt="新湖证券" src="../../static/images/xinhu.png" style="width:70px;"/>
                       </a>
                       <div class="media-body">
                         <h2 class="media-heading">
                             新湖期货
                         </h2>
                         <h6>综合金融服务，一站式理财平台</h6>
-                        <h6 class="pull-right" style="color:#f00; cursor:pointer;">立即开户</h6>
+                        <a class="pull-right" target="_blank" style="color:#f00; font-size:20px;" href="http://www.xinhu.cn/article/42354-1.html">立即开户</a>
                       </div>
                   </div>
               </li>
               <li class="report-item" >
                   <div class="media">
                       <a class="media-left">
-                          <img alt="中阳证券" src="../../static/images/jiuzhou.png" style="width:60px;"/>
+                          <img alt="九州证券" src="../../static/images/jiuzhou.png" style="width:60px;"/>
                       </a>
                       <div class="media-body">
                         <h2 class="media-heading">
                             九州期货
                         </h2>
                         <h6>综合金融服务，一站式理财平台</h6>
-                        <h6 class="pull-right" style="color:#f00; cursor:pointer;">立即开户</h6>
+                        <a class="pull-right" target="_blank" style="color:#f00;font-size:20px;" href="https://jzqh.cfmmc.com/">立即开户</a>
                       </div>
                   </div>
               </li>
               <li class="report-item" >
                   <div class="media">
                       <a class="media-left">
-                          <img alt="中阳证券" src="../../static/images/xihaian.png" style="width:50px; margin-left:10px;"/>
+                          <img alt="西海岸证券" src="../../static/images/xihaian.png" style="width:50px; margin-left:10px;"/>
                       </a>
                       <div class="media-body">
                         <h2 class="media-heading">
                             西海岸期货
                         </h2>
                         <h6>综合金融服务，一站式理财平台</h6>
-                        <h6 class="pull-right" style="color:#f00; cursor:pointer;">立即开户</h6>
+                        <a class="pull-right" target="_blank" style="color:#f00;font-size:20px; " href="http://www.xhajys.com/kaihu/">立即开户</a>
                       </div>
                   </div>
               </li>
