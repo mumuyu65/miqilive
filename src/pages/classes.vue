@@ -46,6 +46,7 @@ import * as Player from '@/js/aodianyun.js'
 export default {
   name: 'Classes',
   components:{ Gift },
+  //组件中data必须是函数
   data () {
     return {
         videoes:[],
