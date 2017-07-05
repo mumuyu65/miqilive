@@ -42,6 +42,12 @@ class API {
         return axios.post('https://api.yddtv.cn:9002/cctv/news/query', {}, config);
     }
 
+    getVideoes(param) {
+        config.data = param;
+
+        return axios.post('https://api.yddtv.cn:9002/cctv/broad/course', {}, config);
+    }
+
 
 }
 export default API;
