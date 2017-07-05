@@ -105,7 +105,7 @@ export default {
 
     //初始化聊天室
     initChat (){
-        if(this.isLogin){
+        if(this.isLogin || window.localStorage.getItem("user") ){
             this.user=JSON.parse(window.localStorage.getItem("user"));
             this.ConnSvr();
         }

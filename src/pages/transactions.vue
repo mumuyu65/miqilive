@@ -110,7 +110,6 @@ import Gift from '@/components/Gift'
 
 export default {
   name: 'Transactions',
-
   mounted (){
     this.initData();
   },
