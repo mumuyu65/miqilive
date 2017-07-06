@@ -1,7 +1,6 @@
 <template>
-  <video controls="controls" autoplay="autoplay" class="player">
-        您当前的浏览器不支持该视频播放
-    <source v-bind:src="test"></source>
+  <video controls="controls" autoplay="autoplay" class="player" name="media" v-bind:src="test">
+    your browser does not support the video tag！
   </video>
 </template>
 

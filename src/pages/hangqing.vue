@@ -118,6 +118,18 @@ export default {
         echartLastTime:'',
 
         selectedHq:{},
+
+        hqws:'',
+
+        ClickedArr: [],
+
+        hqSid: '',
+
+        echartLastTime: '',
+
+        echartHistoryData: [],
+
+        echartHistoryKey: '',
     }
   },
 
@@ -127,6 +139,8 @@ export default {
     this.hqVirtualData();
 
     this.myEchart = echarts.init(document.getElementById('main'));
+
+    this.hqConn(); //长连接实时数据变化
   },
 
   methods:{
@@ -200,7 +214,188 @@ export default {
             });
     },
 
-    hqBoursesDetails: function(item) {
+    hqConn(){
+         var  that = this;
+
+         let params = [{
+                "excd": "XSHGZS",
+                "smcd": "000001"
+            }, {
+                "excd": "NYEFUT",
+                "smcd": "CONC"
+            }, {
+                "excd": "IPM",
+                "smcd": "AU"
+        }];
+
+        //    实时推送数据
+         this.hqws = new WebSocket("ws://58.220.31.241:57081/sub");
+
+         this.hqws.onopen = function() {
+            console.log("conn succeed.");
+            //定时发送心跳请求，保持连接状态
+            setInterval(function() {
+                that.hqws.send(JSON.stringify({
+                    'pklen': 32,
+                    'klen': 16,
+                    'ver': 2,
+                    'op': 2,
+                    'id': 4,
+                    'body': ''
+                }))
+            }, 8000);
+        };
+
+
+
+        this.hqws.onmessage = function(evt) {
+            var receives = JSON.parse(evt.data); //从字符窜中解析出json对象
+            var data = receives[0];
+            switch (data.op) {
+                case 3:
+                    console.log("收到心跳回复");
+                    break;
+                case 1:
+                    var rcvbody = data.body;
+                    that.hqSid = rcvbody.data;
+                    that.hqVirtualDataSubscribe(); //订阅固定数据行情
+                    break;
+                case 6:
+                    var hqUpdate = data.body;
+                    that.updateVirtualData(hqUpdate); //更新固定数据
+                    that.updateEchartsData(hqUpdate); //更新echarts里面的数据
+                    for (var i = 0; i < params.length; i++) {
+                        if (hqUpdate.excd !== params[i].excd) {
+                            that.updateWholeData(hqUpdate); //更新不固定数据
+                        }
+                    }
+                    break;
+            }
+        };
+        that.hqws.onclose = that.hqClose;
+        that.hqws.onerror = that.hqError;
+    },
+
+    //订阅固有数据的行情
+
+    hqVirtualDataSubscribe() {
+        var params = [{
+            "excd": "XSHGZS",
+            "smcd": "000001"
+        }, {
+            "excd": "NYEFUT",
+            "smcd": "CONC"
+        }, {
+            "excd": "IPM",
+            "smcd": "AU"
+        }];
+        var body = {
+            "sid": this.hqSid,
+            "q_list": params
+        };
+
+        $.post('http://58.220.31.241:8006/quotes/quotesSubscription', JSON.stringify(body), function(result) {
+            if (result.code == 100) {
+                console.log("订阅成功！");
+            }
+        })
+    },
+
+    //更新固有数据
+     updateVirtualData(hqUpdate) {
+        //上证指数、美原油连、伦敦金数据实时更新
+        var params = [{
+            "excd": "XSHGZS",
+            "smcd": "000001"
+        }, {
+            "excd": "NYEFUT",
+            "smcd": "CONC"
+        }, {
+            "excd": "IPM",
+            "smcd": "AU"
+        }];
+        for (var i = 0; i < 3; i++) {
+            if (hqUpdate.excd == params[i].excd) {
+                switch (hqUpdate.type) {
+                    case '0':
+                        var newValue = hqUpdate.value;
+                        var signal, increase;
+                        var prev_close_price =this.hqStatics[i].quo.prev_close_price;
+                        if (prev_close_price !== 0 && newValue !== 0)  {
+                            signal = (parseFloat(newValue) - parseFloat(prev_close_price)).toFixed(3);
+                            increase = (signal / parseFloat(prev_close_price)).toFixed(3);
+                            if (signal >= 0) {
+                                this.hqStatics[i].signal = '+' + signal;
+                                this.hqStatics[i].increase = '+' + increase;
+                                this.hqStatics[i].flag ='';
+                            } else {
+                                this.hqStatics[i].signal = signal;
+                                this.hqStatics[i].increase = increase;
+                                this.hqStatics[i].flag ='active';
+                            }
+                        } else {
+                            this.hqStatics[i].signal = 0;
+                            this.hqStatics[i].increase = 0;
+                            this.hqStatics[i].flag ='';
+                        }
+                        break;
+                }
+            }
+        }
+    },
+
+    //订阅echarts数据的行情
+    echartSubscribe(arr) {
+        var body = {
+            "sid": this.hqSid,
+            "q_list": arr
+        };
+
+        $.post(hq_endpoint+'/quotes/quotesSubscription', JSON.stringify(body), function(result) {
+            if (result.code == 100) {
+                console.log("echarts订阅成功！");
+            }
+        })
+    },
+
+    updateEchartsData(eData) {
+        if (this.ClickedArr[0].exCD == eData.excd && this.ClickedArr[0].sCD == eData.smcd &&
+            parseInt(this.echartLastTime) < parseInt(eData.time)) {
+            console.log('eData', eData);
+            this.echarts(this.echartHistoryData, this.echartHistoryKey, eData);
+        }
+    },
+
+    updateWholeData: function(data) {
+        var len = this.ClickedArr.length;
+        for (var i = 0; i < len; i++) {
+            if (data.smcd == this.ClickedArr[i].sCD) {
+                switch (data.type) {
+                    case '0':
+                        var newValue = data.value;
+
+                        var prev_close_price = this.ClickedArr[i].quo.prev_close_price;
+
+                        this.BoursesDetails[i].quo.last_price =newValue;
+
+                        var signal = (parseFloat(newValue) - parseFloat(prev_close_price)).toFixed(3),
+                            increase = (signal / parseFloat(prev_close_price)).toFixed(3);
+                        if (signal >= 0) {
+                            increase = '+' + increase;
+                            this.BoursesDetails[i].flag='';
+                        } else {
+                            //$("#hq_accordian .hq-item").eq(i).find(".hq-list>li").eq(2).find("h4").text(increase).addClass('active');
+                        }
+                        break;
+                    case '2':
+                        //$("#hq_accordian .hq-item").eq(i).find(".hq-list>li").eq(3).find("h4").text(data.value);
+                        break;
+                }
+            }
+        }
+    },
+
+    hqBoursesDetails(item) {
         //各股市的股票详情
         let params = {
             "excd": item.code,
@@ -240,6 +435,8 @@ export default {
                     obj[i].isActive = false;
 
                 }
+                    that.hqSubscribe(obj); //订阅非固定数据行情
+
                     that.BoursesDetails = obj;
 
                     that.BoursesDetails[0].isActive = true;
@@ -250,6 +447,29 @@ export default {
         }).catch(function (error) {
                 console.log(error);
             });
+    },
+
+    hqSubscribe(arr) {
+        this.ClickedArr = arr; //暂时存储当前被点击的数组
+        var tempArr = [];
+        var arr_len = arr.length;
+        for (var i = 0; i < arr_len; i++) {
+            tempArr.push({
+                "excd": arr[i].exCD,
+                "smcd": arr[i].sCD
+            });
+        }
+        //根据点击的交易所不同，来进行订阅
+        var body = {
+            "sid": this.hqSid,
+            "q_list": tempArr
+        };
+
+        $.post(hq_endpoint+'/quotes/quotesSubscription', JSON.stringify(body), function(result) {
+            if (result.code == 100) {
+                console.log("订阅成功！");
+            }
+        })
     },
 
     showEcharts(Arr,key,newData){
@@ -426,6 +646,15 @@ export default {
         var second = time.getSeconds() > 9 && time.getSeconds() || ('0' + time.getSeconds())
         var YmdHis = year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second;
         return YmdHis;
+    },
+
+    hqClose() {
+        console.log("WebSocket Closed.");
+        //2秒后启动重连
+        setTimeout("Zhibo.hqVirtualConn()", 2000);
+    },
+    hqError(evt) {
+        console.log("WebSocket Error." + evt);
     },
 
   },
