@@ -48,6 +48,12 @@ class API {
         return axios.post('https://api.yddtv.cn:9002/cctv/broad/course', {}, config);
     }
 
+    economics(param) {
+        return axios.get('https://mt.china-vm.com:57077/query/newslist', {
+            params: param
+        }, config);
+    }
+
 
 }
 export default API;
