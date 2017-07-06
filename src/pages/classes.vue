@@ -13,9 +13,7 @@
         </div>
     </div>
     <div class="zhibo">
-        <div id="player" class="player">
-
-        </div>
+        <my-video v-bind:msg="showVideo.videourl"></my-video>
         <h4 style="padding-left:20px;">{{showVideo.title}}</h4>
         <ol class="list-inline" style="padding-left:20px;">
             <li><h4>可看人数：245</h4></li>
@@ -39,13 +37,12 @@ const api = new API();
 
 import Gift from '@/components/Gift'
 
-import axios from 'axios'
+import myVideo from '@/components/Video'
 
-import * as Player from '@/js/aodianyun.js'
+import axios from 'axios'
 
 export default {
   name: 'Classes',
-  components:{ Gift },
   //组件中data必须是函数
   data () {
     return {
@@ -53,10 +50,9 @@ export default {
         showVideo:'',
     }
   },
+  components:{ Gift,myVideo },
   mounted(){
-
     this.initData();
-
   },
   methods:{
     initData (){
@@ -68,7 +64,6 @@ export default {
         };
 
         api.getVideoes(params).then(function (res) {
-             console.log(res);
              if(res.data.Code ==3){
                 that.videoes = res.data.Data.Detail;
 
@@ -81,24 +76,10 @@ export default {
           .catch(function (error) {
              console.log(error);
           });
-
     },
 
     playVideo(item){
-        this.showVideo = item ;
-        let objectPlayer = new Player.aodianPlayer({
-              container: 'player', //播放器容器ID，必要参数
-              hlsUrl: this.showVideo.videourl, //控制台开通的APP rtmp地址，必要参数
-              width: '858', //播放器宽度，可用数字、百分比等
-              height: '454', //播放器高度，可用数字、百分比等
-              autostart: true, //是否自动播放，默认为false
-              bufferlength: '3', //视频缓冲时间，默认为3秒。hls不支持！手机端不支持
-              maxbufferlength: '2', //最大视频缓冲时间，默认为2秒。hls不支持！手机端不支持
-              stretching: '1', //设置全屏模式,1代表按比例撑满至全屏,2代表铺满全屏,3代表视频原始大小,默认值为1。hls初始设置不支持，手机端不支持
-              controlbardisplay: 'enable', //是否显示控制栏，值为：disable、enable默认为disable。
-              isfullscreen: true, //是否双击全屏，默认为true
-          });
-
+        this.showVideo = item;
     }
 
 

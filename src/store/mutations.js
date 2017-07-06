@@ -36,6 +36,6 @@ export default {
 
         CHANGE_Login(state, value) {
             state.isLogin = value;
-        }
+        },
 
 }

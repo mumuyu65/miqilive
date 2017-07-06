@@ -55,3 +55,4 @@ export const changeLogin = ({
 }, value) => {
     commit('CHANGE_Login', value)
 }
+
