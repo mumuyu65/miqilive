@@ -82,7 +82,7 @@ export default {
     border-bottom: 1px solid #ccc;
     margin-bottom:50px;
     color:#fff;
-    width:86%;
+    width:100%;
   }
 
   .title i {
@@ -145,7 +145,7 @@ li.one-k .left p {
 
 li.one-k .right {
     float: left;
-    width:80%;
+    width:93%;
     border-left: 1px solid #ccc;
     padding-left: 26px;
     padding-bottom: 10px;
